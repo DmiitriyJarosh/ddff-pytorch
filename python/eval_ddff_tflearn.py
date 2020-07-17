@@ -3,7 +3,7 @@ import ddff.metricseval.DDFFTFLearnEval as DDFFTFLearnEval
 
 if __name__ == "__main__":
     #Set parameters
-    image_size = (383,552)
+    image_size = (552, 383)
     filename_testset = "ddff-dataset-test.h5"
     checkpoint_file = "ddffnet-cc3-snapshot-121256.npz"
     stack_key = "stack_test"
