@@ -11,12 +11,12 @@ class BaseDDFFEval:
     def evaluate(self, dataloader, accthrs = [1.25, 1.25**2, 1.25**3], image_size=(383,552)):
         avgmetrics = np.zeros((1, 7+len(accthrs)), dtype=float)
         for i, data in enumerate(dataloader):
-            inputs, output = data["input"], data["output"]
+            inputs = data["input"]
             if torch.cuda.is_available():
                     inputs = inputs.cuda()
             output_approx = self.trainer.evaluate(inputs)
-            metrics = self.__calmetrics(output_approx.permute(0,2,3,1).squeeze().data.cpu().numpy()[:image_size[0],:image_size[1]], output.permute(0,2,3,1).squeeze().numpy()[:image_size[0],:image_size[1]], 1.0, accthrs, bumpinessclip=0.05, ignore_zero=True)
-            avgmetrics += metrics
+            # metrics = self.__calmetrics(output_approx.permute(0,2,3,1).squeeze().data.cpu().numpy()[:image_size[0],:image_size[1]], output.permute(0,2,3,1).squeeze().numpy()[:image_size[0],:image_size[1]], 1.0, accthrs, bumpinessclip=0.05, ignore_zero=True)
+            # avgmetrics += metrics
         return avgmetrics/len(dataloader)
 
     # Metrics calculation provided by Caner Hazirbas

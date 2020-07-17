@@ -28,8 +28,8 @@ class FocalStackDDFFH5Reader(Dataset):
 
     def __getitem__(self, idx):
         #Create sample dict
-        sample = {'input': self.hdf5[self.stack_key][idx].astype(float), 'output': self.hdf5[self.disp_key][idx]}
-
+        # sample = {'input': self.hdf5[self.stack_key][idx].astype(float), 'output': self.hdf5[self.disp_key][idx]}
+        sample = {'input': self.hdf5[self.stack_key][idx].astype(float)}
         #Transform sample with data augmentation transformers
         if self.transform:
             sample = self.transform(sample)
@@ -43,12 +43,12 @@ class FocalStackDDFFH5Reader(Dataset):
         """Convert ndarrays in sample to Tensors."""
         def __call__(self, sample):
             #Add color dimension to depth map
-            sample['output'] = np.expand_dims(sample['output'], axis=0)
+            # sample['output'] = np.expand_dims(sample['output'], axis=0)
             # swap color axis because
             # numpy image: H x W x C
             # torch image: C X H X W
             sample['input'] = torch.from_numpy(sample['input'].transpose((0,3,1,2))).float()
-            sample['output'] = torch.from_numpy(sample['output']).float()
+            # sample['output'] = torch.from_numpy(sample['output']).float()
             return sample
 
     class Normalize(object):
@@ -129,7 +129,7 @@ class FocalStackDDFFH5Reader(Dataset):
             padh = np.int32(new_h - h)
             padw = np.int32(new_w - w)
             sample['input'] = torch.stack([torch.from_numpy(np.pad(sample_input.numpy(), ((0,0),(0,padh),(0,padw)), mode="reflect")).float() for sample_input in sample['input']])
-            sample['output'] = torch.from_numpy(np.pad(sample['output'].numpy(), ((0,0),(0,padh),(0,padw)), mode="constant", constant_values=self.ground_truth_pad_value)).float()
+            # sample['output'] = torch.from_numpy(np.pad(sample['output'].numpy(), ((0,0),(0,padh),(0,padw)), mode="constant", constant_values=self.ground_truth_pad_value)).float()
 
             return sample
 
